@@ -713,7 +713,7 @@
         <!-- Welcome Guidelines Card -->
         <div class="intro-card" id="introCard">
             <h2>Instant Vintage Figure Valuation</h2>
-            <p>Snap a photo of the packaged action figure cardback or box. The AI will analyze package condition (dents, bubble cracks, creases), query Chris Gray's eBay scraped sales data, and calculate GameStop trade-in quotes.</p>
+            <p>Snap a photo of the packaged action figure cardback or box. The AI will analyze package condition (dents, bubble cracks, creases), query eBay sales data, and calculate GameStop trade-in quotes.</p>
         </div>
 
         <!-- Scan and Viewfinder Area -->
@@ -888,6 +888,9 @@
                 </div>
                 <div class="sales-list" id="ebaySalesList">
                     <!-- Javascript inserts auction items here -->
+                </div>
+                <div style="font-size: 11px; color: var(--text-secondary); margin-top: 12px; line-height: 1.4; border-top: 1px solid var(--border-color); padding-top: 8px;">
+                    * Pricing is retrieved from historical completed sold auctions (or active listings if API credentials are configured). Note: eBay ended listing URLs may dynamically redirect to active listings of the same item when clicked.
                 </div>
             </div>
 
@@ -1139,7 +1142,11 @@
                     const metaSpan = document.createElement('span');
                     metaSpan.className = 'sale-meta';
                     const condText = sale.ebayCondition ? `[${sale.ebayCondition}] ` : '';
-                    metaSpan.textContent = `${condText}Sold: ${sale.date} | +$${sale.shipping.toFixed(2)} Shipping`;
+                    if (sale.date === 'Active Listing') {
+                        metaSpan.textContent = `${condText}Active Listing | +$${sale.shipping.toFixed(2)} Shipping`;
+                    } else {
+                        metaSpan.textContent = `${condText}Sold: ${sale.date} | +$${sale.shipping.toFixed(2)} Shipping`;
+                    }
                     
                     infoDiv.appendChild(titleElement);
                     infoDiv.appendChild(metaSpan);
