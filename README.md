@@ -48,3 +48,11 @@ The application will launch on:
 [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 > **Note on Security:** As per security compliance, the server listens exclusively on `127.0.0.1` during testing and development.
+
+---
+
+## Video Walkthrough
+
+Watch the screen walkthrough demonstrating the graded card analysis, eBay completed search grounding, and payout multiplier details:
+
+[walkthrough_video](video/demo_july_24.mov)
