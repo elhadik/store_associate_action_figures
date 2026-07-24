@@ -55,4 +55,4 @@ The application will launch on:
 
 Watch the screen walkthrough demonstrating the graded card analysis, eBay completed search grounding, and payout multiplier details:
 
-![walkthrough_video](video/demo_july_24.mp4)
+<video src="video/demo_july_24.mp4" controls="controls" style="max-width: 100%;"></video>
