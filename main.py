@@ -46,7 +46,7 @@ except Exception as e:
 app = FastAPI(title="StoreAssociate Action Figures Trade-In App")
 
 # Define target model
-MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-flash-latest")
 
 # Define Pydantic models for request/response structured outputs
 class EbaySale(BaseModel):
