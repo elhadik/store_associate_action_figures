@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameStop StoreAssociate - Action Figures Appraiser</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* GameStop Premium Dark Theme Tokens */
+            --bg-obsidian: #0b0c10;
+            --bg-card: rgba(22, 24, 30, 0.85);
+            --bg-card-hover: rgba(30, 33, 42, 0.95);
+            --border-glow: rgba(255, 30, 30, 0.15);
+            --primary-red: #ff1e1e;
+            --primary-red-hover: #e01b1b;
+            --neon-green: #39ff14;
+            --neon-green-glow: rgba(57, 255, 20, 0.15);
+            --text-primary: #f5f6f8;
+            --text-secondary: #9aa0a6;
+            --text-muted: #5f6368;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --gradient-accent: linear-gradient(135deg, #ff1e1e, #ff5e3a);
+            --shadow-premium: 0 10px 40px -10px rgba(0, 0, 0, 0.7);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-obsidian);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Header design */
+        header {
+            width: 100%;
+            padding: 20px 24px;
+            background: rgba(11, 12, 16, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-badge {
+            background: var(--gradient-accent);
+            color: white;
+            padding: 6px 12px;
+            font-weight: 800;
+            border-radius: 6px;
+            letter-spacing: 1px;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(255, 30, 30, 0.4);
+        }
+
+        .logo-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-title span {
+            color: var(--primary-red);
+        }
+
+        .associate-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid var(--glass-border);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--neon-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        /* Main Workspace Container */
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 24px 16px 80px 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Instructions card */
+        .intro-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-premium);
+        }
+
+        .intro-card h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .intro-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Scan Section containing Drag-Drop & Camera Viewfinders */
+        .scan-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .scan-card {
+            background: var(--bg-card);
+            border: 2px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .scan-card.dragover {
+            border-color: var(--primary-red);
+            background: rgba(255, 30, 30, 0.04);
+            box-shadow: 0 0 30px rgba(255, 30, 30, 0.1) inset;
+        }
+
+        .scan-icon-circle {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+
+        .scan-card:hover .scan-icon-circle {
+            transform: scale(1.08);
+            border-color: rgba(255, 30, 30, 0.4);
+        }
+
+        .scan-icon-circle svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--text-secondary);
+            transition: fill 0.3s;
+        }
+
+        .scan-card:hover .scan-icon-circle svg {
+            fill: var(--primary-red);
+        }
+
+        .scan-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .scan-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            max-width: 320px;
+        }
+
+        .scan-actions {
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-accent);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 30, 30, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 30, 30, 0.55);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Camera live stream interface */
+        .camera-container {
+            display: none;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            background: black;
+            position: relative;
+            box-shadow: var(--shadow-premium);
+        }
+
+        .camera-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+            transform: scaleX(1); /* No mirror image for packaging text readable */
+        }
+
+        .camera-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 30px solid rgba(0,0,0,0.5);
+            pointer-events: none;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .camera-guide-box {
+            width: 80%;
+            height: 70%;
+            border: 2px dashed var(--primary-red);
+            border-radius: 12px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);
+        }
+
+        .camera-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            pointer-events: auto;
+        }
+
+        /* Loading / Processing screen */
+        .loading-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-premium);
+        }
+
+        .scanner-beam-wrapper {
+            position: relative;
+            width: 200px;
+            height: 150px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            overflow: hidden;
+        }
+
+        .scanner-toy-silhouette {
+            width: 60px;
+            height: 100px;
+            background: rgba(255,255,255,0.15);
+            margin: 25px auto;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .scanner-beam {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: var(--primary-red);
+            box-shadow: 0 0 15px var(--primary-red);
+            top: 0;
+            animation: scanning 2s infinite ease-in-out;
+        }
+
+        @keyframes scanning {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
+        }
+
+        .shimmer-text {
+            font-size: 18px;
+            font-weight: 600;
+            background: linear-gradient(90deg, #9aa0a6 0%, #f5f6f8 50%, #9aa0a6 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 1.5s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        /* Result Quote View */
+        .quote-container {
+            display: none;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .receipt-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-premium);
+        }
+
+        .receipt-header {
+            background: linear-gradient(135deg, rgba(22, 24, 30, 0.95), rgba(11, 12, 16, 1));
+            padding: 24px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .receipt-brand {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-red);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .receipt-status-ok {
+            background: rgba(57, 255, 20, 0.1);
+            color: var(--neon-green);
+            border: 1px solid rgba(57, 255, 20, 0.2);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .receipt-status-warn {
+            background: rgba(255, 165, 0, 0.1);
+            color: #ffa500;
+            border: 1px solid rgba(255, 165, 0, 0.2);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .receipt-body {
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .receipt-body {
+                grid-template-columns: 1.2fr 1fr;
+            }
+        }
+
+        /* Left Side: Product ID and Grade details */
+        .product-details {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .detail-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding-bottom: 12px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .detail-value.highlight {
+            color: var(--text-primary);
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* Condition Grade Badge */
+        .grade-badge-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .grade-badge {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .grade-a { background: rgba(57, 255, 20, 0.1); color: var(--neon-green); border: 1px solid rgba(57, 255, 20, 0.3); }
+        .grade-b { background: rgba(0, 191, 255, 0.1); color: #00bfff; border: 1px solid rgba(0, 191, 255, 0.3); }
+        .grade-c { background: rgba(255, 165, 0, 0.1); color: #ffa500; border: 1px solid rgba(255, 165, 0, 0.3); }
+        .grade-d { background: rgba(255, 30, 30, 0.1); color: var(--primary-red); border: 1px solid rgba(255, 30, 30, 0.3); }
+
+        .grade-notes {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* Right Side: GameStop Payout Receipt Details */
+        .payout-card {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .payout-header {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 10px;
+        }
+
+        .offer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .offer-type {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .offer-value {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .offer-value.green {
+            color: var(--neon-green);
+            text-shadow: 0 0 15px var(--neon-green-glow);
+        }
+
+        .offer-value.white {
+            color: var(--text-primary);
+        }
+
+        .payout-breakdown {
+            border-top: 1px dashed var(--glass-border);
+            padding-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* eBay Pricing Scraping grounded pricing list */
+        .ebay-sales-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow-premium);
+        }
+
+        .ebay-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 12px;
+        }
+
+        .ebay-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .ebay-verified {
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            border: 1px solid var(--glass-border);
+        }
+
+        .sales-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sale-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .sale-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-width: 75%;
+        }
+
+        .sale-title {
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sale-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .sale-price {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Manual entry section if scan fails */
+        .manual-section {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .input-group input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-red);
+        }
+
+        /* Toast messaging setup */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #ba1a1a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo-container">
+            <span class="logo-badge">GS APPRAISER</span>
+            <div class="logo-title">Collectibles<span>Trader</span></div>
+        </div>
+        <div class="associate-badge">
+            <div class="status-dot"></div>
+            <span>Store Associate Session</span>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <div class="container">
+        
+        <!-- Welcome Guidelines Card -->
+        <div class="intro-card" id="introCard">
+            <h2>Instant Vintage Figure Valuation</h2>
+            <p>Snap a photo of the packaged action figure cardback or box. The AI will analyze package condition (dents, bubble cracks, creases), query Chris Gray's eBay scraped sales data, and calculate GameStop trade-in quotes.</p>
+        </div>
+
+        <!-- Scan and Viewfinder Area -->
+        <div class="scan-wrapper" id="scanSection">
+            <!-- Drag & Drop Zone -->
+            <div class="scan-card" id="dropzone">
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                <div class="scan-icon-circle">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 12h-2v3h-3v2h5v-5zM7 9h3V7H5v5h2V9zm14-6H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/>
+                    </svg>
+                </div>
+                <div class="scan-title">Scan Action Figure</div>
+                <div class="scan-desc">Upload a picture of the packaging, drag it here, or snap a camera snapshot.</div>
+                
+                <div class="scan-actions">
+                    <button class="btn btn-primary" id="btnLaunchCamera">
+                        <svg width="18" height="18" fill="white" viewBox="0 0 24 24" style="display: inline-block;">
+                            <path d="M12 12c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                        Use Camera
+                    </button>
+                    <button class="btn btn-secondary" id="btnSelectFile">Browse File</button>
+                </div>
+            </div>
+
+            <!-- WebRTC Live Viewfinder -->
+            <div class="camera-container" id="cameraViewfinder">
+                <video id="videoElement" autoplay playsinline></video>
+                <div class="camera-overlay">
+                    <div class="camera-guide-box"></div>
+                </div>
+                <div class="camera-controls">
+                    <button class="btn btn-primary" id="btnCapture">Capture Scan</button>
+                    <button class="btn btn-secondary" id="btnCancelCamera">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Optional manual helper parameters for the associate -->
+            <div class="manual-section">
+                <div class="input-group">
+                    <label for="manualBarcode">UPC Barcode (Optional override)</label>
+                    <input type="text" id="manualBarcode" placeholder="E.g. 029329023901" pattern="[0-9]*">
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress/Scanning Screen -->
+        <div class="loading-container" id="loadingSection">
+            <div class="scanner-beam-wrapper">
+                <div class="scanner-toy-silhouette"></div>
+                <div class="scanner-beam"></div>
+            </div>
+            <div class="shimmer-text">Analyzing Figure Packaging...</div>
+            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 12px;">Gemini is grading card wear and reading barcodes...</p>
+        </div>
+
+        <!-- Result / Quote Details Page -->
+        <div class="quote-container" id="quoteSection">
+            <!-- Receipt Container -->
+            <div class="receipt-card">
+                <div class="receipt-header">
+                    <div class="receipt-brand">GameStop trade quote</div>
+                    <div class="receipt-status-ok" id="lblQuoteStatus">QUOTE READY</div>
+                </div>
+                
+                <div class="receipt-body">
+                    <div class="product-details">
+                        <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 16px;">
+                            <img id="imgQuotePreview" style="width: 100px; height: 135px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: #000; box-shadow: 0 4px 12px rgba(0,0,0,0.5);" />
+                            <div style="flex: 1;">
+                                <div class="detail-row" style="border-bottom: none; padding-bottom: 0; padding-top: 0;">
+                                    <span class="detail-label" style="font-size: 11px;">Item / Product Name</span>
+                                    <span class="detail-value highlight" id="lblProductName" style="font-size: 16px; line-height: 1.3;">Star Wars Darth Vader</span>
+                                </div>
+                                <div class="detail-row" id="rowAlternativeNames" style="display: none; border-bottom: none; padding-top: 6px;">
+                                    <span class="detail-label" style="font-size: 11px;">Alternative Names</span>
+                                    <span class="detail-value" id="lblAlternativeNames" style="font-size: 12px; color: var(--text-secondary); line-height: 1.35;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Manufacturer / Brand</span>
+                            <span class="detail-value" id="lblManufacturer">Kenner</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Toy Series</span>
+                            <span class="detail-value" id="lblSeries">The Vintage Collection</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Release Year</span>
+                            <span class="detail-value" id="lblYear">1983</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">UPC Barcode</span>
+                            <span class="detail-value" id="lblBarcode">0123456789</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">AI Packaging Condition Grade</span>
+                            <div class="grade-badge-wrap">
+                                <span class="grade-badge" id="lblGradeBadge">Mint</span>
+                                <span class="grade-notes" id="lblGradeNotes">Very clean, soft corners.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: GameStop Store payout values -->
+                    <div class="payout-card">
+                        <div class="payout-header">Trade Payout Estimate</div>
+                        
+                        <div class="offer-row">
+                            <div class="offer-type">
+                                <p style="font-weight:700; color: var(--text-primary);">Store Credit Offer</p>
+                                <p style="font-size: 11px;">Best Value</p>
+                            </div>
+                            <div class="offer-value green" id="valCreditOffer">$0.00</div>
+                        </div>
+
+                        <div class="offer-row">
+                            <div class="offer-type">
+                                <p style="font-weight:700;">Cash Payout Offer</p>
+                                <p style="font-size: 11px;">Deterministic 60%</p>
+                            </div>
+                            <div class="offer-value white" id="valCashOffer">$0.00</div>
+                        </div>
+
+                        <div class="payout-breakdown">
+                            <div class="breakdown-row">
+                                <span>eBay Market Average:</span>
+                                <span id="valEbayAvg">$0.00</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>eBay Market Median:</span>
+                                <span id="valEbayMedian">$0.00</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span>Condition-Adjusted Value:</span>
+                                <span id="valAdjustedValue">$0.00</span>
+                            </div>
+                            <div class="breakdown-row">
+                                <span id="valDiscountText">Grade Multiplier:</span>
+                                <span id="valMultiplier">100%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="valuation-info-box" style="margin-top: 16px; padding: 14px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; font-size: 11.5px; color: var(--text-secondary);">
+                            <h4 style="color: var(--text-primary); margin-bottom: 6px; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.5px;">Valuation Formula</h4>
+                            <p style="margin-bottom: 6px; line-height: 1.45;">
+                                <strong>Adjusted Value:</strong> <code>Average eBay Sold Price × Multiplier</code>
+                            </p>
+                            <p style="margin-bottom: 10px; line-height: 1.45;">
+                                <strong>Store Credit Offer:</strong> <code>75% of Adjusted Value</code> <br/>
+                                <strong>Cash Payout Offer:</strong> <code>60% of Adjusted Value</code>
+                            </p>
+                            <h4 style="color: var(--text-primary); margin-bottom: 4px; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.5px;">Condition Multipliers</h4>
+                            <div style="display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; line-height: 1.45;">
+                                <span>Mint / Near Mint:</span> <strong style="color: var(--neon-green);">100% (1.0x)</strong>
+                                <span>Fine / Very Fine:</span> <strong style="color: var(--text-primary);">85% (0.85x)</strong>
+                                <span>Good:</span> <strong style="color: var(--text-secondary);">65% (0.65x)</strong>
+                                <span>Fair / Poor:</span> <strong style="color: var(--primary-red);">40% (0.40x)</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- eBay Completed auction sales references -->
+            <div class="ebay-sales-card">
+                <div class="ebay-header">
+                    <h3>eBay Completed Auctions</h3>
+                    <div class="ebay-verified">Grounded Pricing Sources</div>
+                </div>
+                <div class="sales-list" id="ebaySalesList">
+                    <!-- Javascript inserts auction items here -->
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div style="display: flex; gap: 16px; justify-content: center; margin-top: 12px;">
+                <button class="btn btn-secondary" id="btnRescan" style="flex: 1; justify-content: center;">Appraise Another Figure</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Error Toast -->
+    <div class="toast" id="errorToast">Error identifying action figure. Please try again.</div>
+
+    <!-- Hidden Canvas to handle WebRTC snapshot captures -->
+    <canvas id="hiddenCanvas" style="display: none;" width="640" height="480"></canvas>
+
+    <script>
+        // DOM Elements
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const btnSelectFile = document.getElementById('btnSelectFile');
+        const btnLaunchCamera = document.getElementById('btnLaunchCamera');
+        const btnCancelCamera = document.getElementById('btnCancelCamera');
+        const cameraViewfinder = document.getElementById('cameraViewfinder');
+        const videoElement = document.getElementById('videoElement');
+        const btnCapture = document.getElementById('btnCapture');
+        const hiddenCanvas = document.getElementById('hiddenCanvas');
+        
+        const scanSection = document.getElementById('scanSection');
+        const introCard = document.getElementById('introCard');
+        const loadingSection = document.getElementById('loadingSection');
+        const quoteSection = document.getElementById('quoteSection');
+        
+        // Payout Labels
+        const lblQuoteStatus = document.getElementById('lblQuoteStatus');
+        const lblProductName = document.getElementById('lblProductName');
+        const rowAlternativeNames = document.getElementById('rowAlternativeNames');
+        const lblAlternativeNames = document.getElementById('lblAlternativeNames');
+        const lblManufacturer = document.getElementById('lblManufacturer');
+        const lblSeries = document.getElementById('lblSeries');
+        const lblYear = document.getElementById('lblYear');
+        const lblBarcode = document.getElementById('lblBarcode');
+        const lblGradeBadge = document.getElementById('lblGradeBadge');
+        const lblGradeNotes = document.getElementById('lblGradeNotes');
+        
+        const valCreditOffer = document.getElementById('valCreditOffer');
+        const valCashOffer = document.getElementById('valCashOffer');
+        const valEbayAvg = document.getElementById('valEbayAvg');
+        const valEbayMedian = document.getElementById('valEbayMedian');
+        const valAdjustedValue = document.getElementById('valAdjustedValue');
+        const valMultiplier = document.getElementById('valMultiplier');
+        const valDiscountText = document.getElementById('valDiscountText');
+        const ebaySalesList = document.getElementById('ebaySalesList');
+        
+        const btnRescan = document.getElementById('btnRescan');
+        const manualBarcode = document.getElementById('manualBarcode');
+        const errorToast = document.getElementById('errorToast');
+
+        let cameraStream = null;
+
+        // Show/Hide Helpers
+        function showLoading() {
+            scanSection.style.display = 'none';
+            introCard.style.display = 'none';
+            loadingSection.style.display = 'flex';
+            quoteSection.style.display = 'none';
+        }
+
+        function showQuote() {
+            loadingSection.style.display = 'none';
+            quoteSection.style.display = 'block';
+        }
+
+        function showScanForm() {
+            scanSection.style.display = 'flex';
+            introCard.style.display = 'block';
+            loadingSection.style.display = 'none';
+            quoteSection.style.display = 'none';
+            // Stop camera if running
+            stopCamera();
+        }
+
+        function showError(msg) {
+            errorToast.textContent = msg || "Error scanning action figure.";
+            errorToast.classList.add('show');
+            setTimeout(() => errorToast.classList.remove('show'), 4000);
+            showScanForm();
+        }
+
+        // Camera functions
+        async function startCamera() {
+            try {
+                dropzone.style.display = 'none';
+                cameraViewfinder.style.display = 'block';
+                
+                // Request environment camera for barcode/product scans
+                cameraStream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: { ideal: "environment" },
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    },
+                    audio: false
+                });
+                
+                videoElement.srcObject = cameraStream;
+            } catch (err) {
+                console.error("Camera access failed:", err);
+                showError("Could not access device camera. Please upload an image file instead.");
+            }
+        }
+
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            videoElement.srcObject = null;
+            cameraViewfinder.style.display = 'none';
+            dropzone.style.display = 'flex';
+        }
+
+        // Handle scanned photo submission
+        async function uploadImageFile(file) {
+            // Load local image preview thumbnail
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imgQuotePreview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            showLoading();
+            
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            const barcodeVal = manualBarcode.value.trim();
+            if (barcodeVal) {
+                formData.append('manual_barcode', barcodeVal);
+            }
+
+            try {
+                const response = await fetch('/api/scan', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errBody = await response.json();
+                    throw new Error(errBody.detail || "Server error analyzing image.");
+                }
+
+                const data = await response.json();
+                renderQuote(data);
+            } catch (err) {
+                console.error("Upload/scan failed:", err);
+                showError(err.message);
+            }
+        }
+
+        // Render valuation quotes and auction listings
+        function renderQuote(data) {
+            // Set quote status indicator
+            if (data.isFallbackPricing) {
+                lblQuoteStatus.textContent = "DEMO FALLBACK QUOTE";
+                lblQuoteStatus.className = "receipt-status-warn";
+            } else {
+                lblQuoteStatus.textContent = "QUOTE READY";
+                lblQuoteStatus.className = "receipt-status-ok";
+            }
+
+            lblProductName.textContent = data.productName;
+            
+            // Alternative Names Row
+            if (data.possibleAlternativeNames && data.possibleAlternativeNames.length > 0) {
+                lblAlternativeNames.textContent = data.possibleAlternativeNames.join(", ");
+                rowAlternativeNames.style.display = "flex";
+            } else {
+                rowAlternativeNames.style.display = "none";
+            }
+
+            lblManufacturer.textContent = data.manufacturer;
+            lblSeries.textContent = data.series;
+            lblYear.textContent = data.year;
+            lblBarcode.textContent = data.barcode;
+            lblGradeNotes.textContent = data.conditionNotes;
+            
+            // Set condition badge style class
+            lblGradeBadge.textContent = data.conditionGrade;
+            lblGradeBadge.className = 'grade-badge'; // Reset classes
+            
+            let multiplierPercent = "100%";
+            if (data.conditionGrade === "Mint/Near Mint") {
+                lblGradeBadge.classList.add('grade-a');
+                multiplierPercent = "100%";
+            } else if (data.conditionGrade === "Fine/Very Fine") {
+                lblGradeBadge.classList.add('grade-b');
+                multiplierPercent = "85%";
+            } else if (data.conditionGrade === "Good") {
+                lblGradeBadge.classList.add('grade-c');
+                multiplierPercent = "65%";
+            } else {
+                lblGradeBadge.classList.add('grade-d');
+                multiplierPercent = "40%";
+            }
+
+            valMultiplier.textContent = multiplierPercent;
+            valDiscountText.textContent = `${data.conditionGrade} Multiplier:`;
+
+            // Set monetary values
+            valCreditOffer.textContent = `$${data.creditOffer.toFixed(2)}`;
+            valCashOffer.textContent = `$${data.cashOffer.toFixed(2)}`;
+            valEbayAvg.textContent = `$${data.ebayAveragePrice.toFixed(2)}`;
+            valEbayMedian.textContent = `$${data.ebayMedianPrice.toFixed(2)}`;
+            valAdjustedValue.textContent = `$${data.conditionAdjustedValue.toFixed(2)}`;
+
+            // Populate recent sales
+            ebaySalesList.innerHTML = '';
+            if (data.recentSales.length === 0) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.style.textAlign = 'center';
+                emptyDiv.style.color = 'var(--text-secondary)';
+                emptyDiv.style.padding = '20px 0';
+                emptyDiv.textContent = 'No matching completed listings found on eBay.';
+                ebaySalesList.appendChild(emptyDiv);
+            } else {
+                data.recentSales.forEach(sale => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'sale-item';
+                    
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'sale-info';
+                    
+                    let titleElement;
+                    if (sale.url) {
+                        titleElement = document.createElement('a');
+                        titleElement.href = sale.url;
+                        titleElement.target = '_blank';
+                        titleElement.style.color = 'var(--text-primary)';
+                        titleElement.style.textDecoration = 'none';
+                        titleElement.style.borderBottom = '1px dashed var(--primary-red)';
+                    } else {
+                        titleElement = document.createElement('span');
+                    }
+                    titleElement.className = 'sale-title';
+                    titleElement.textContent = sale.title;
+                    
+                    const metaSpan = document.createElement('span');
+                    metaSpan.className = 'sale-meta';
+                    const condText = sale.ebayCondition ? `[${sale.ebayCondition}] ` : '';
+                    metaSpan.textContent = `${condText}Sold: ${sale.date} | +$${sale.shipping.toFixed(2)} Shipping`;
+                    
+                    infoDiv.appendChild(titleElement);
+                    infoDiv.appendChild(metaSpan);
+                    
+                    const priceDiv = document.createElement('div');
+                    priceDiv.className = 'sale-price';
+                    priceDiv.textContent = `$${sale.price.toFixed(2)}`;
+                    
+                    itemDiv.appendChild(infoDiv);
+                    itemDiv.appendChild(priceDiv);
+                    
+                    ebaySalesList.appendChild(itemDiv);
+                });
+            }
+
+            showQuote();
+        }
+
+        // Drag and Drop implementation
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('dragover');
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type.startsWith('image/')) {
+                uploadImageFile(files[0]);
+            } else {
+                showError("Please upload a valid action figure packaging image.");
+            }
+        });
+
+        // Click actions
+        btnSelectFile.addEventListener('click', (e) => {
+            e.stopPropagation();
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                uploadImageFile(fileInput.files[0]);
+            }
+        });
+
+        btnLaunchCamera.addEventListener('click', (e) => {
+            e.stopPropagation();
+            startCamera();
+        });
+
+        btnCancelCamera.addEventListener('click', (e) => {
+            e.stopPropagation();
+            stopCamera();
+        });
+
+        // Take snapshot from WebRTC stream
+        btnCapture.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!cameraStream) return;
+            
+            const context = hiddenCanvas.getContext('2d');
+            
+            // Adjust canvas resolution match video width/height
+            hiddenCanvas.width = videoElement.videoWidth || 640;
+            hiddenCanvas.height = videoElement.videoHeight || 480;
+            
+            context.drawImage(videoElement, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
+            
+            hiddenCanvas.toBlob((blob) => {
+                if (blob) {
+                    const file = new File([blob], "camera_scan.png", { type: "image/png" });
+                    uploadImageFile(file);
+                } else {
+                    showError("Could not capture image from viewfinder.");
+                }
+            }, 'image/png');
+        });
+
+        btnRescan.addEventListener('click', () => {
+            fileInput.value = '';
+            manualBarcode.value = '';
+            showScanForm();
+        });
+
+    </script>
+</body>
+</html>
