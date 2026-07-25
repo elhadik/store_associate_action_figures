@@ -270,6 +270,7 @@ async def scan_action_figure(
         - The `price` must be the final sold price of the item itself (excluding shipping).
         - The `url` must be a valid, standard eBay item URL following the exact pattern: `https://www.ebay.com/itm/[12-digit-numerical-id]` (e.g. `https://www.ebay.com/itm/134902500432`). Do NOT use text-based slug URLs (e.g. `https://www.ebay.com/itm/jada-toys-megaman`) as they are invalid and result in 404 page not found errors.
         - If the exact price and a valid numerical URL are not clearly visible in the search metadata or snippet for a specific listing, do not include it in the `recentSales` list. No fake or hallucinated data.
+        - Pay extreme attention to listings marked as 'Best Offer Accepted' or containing recommended ads in the snippet. The `price` must be the actual transaction sold price of the main listing (often shown as 'Sold for $X' or in the Google metadata sold fields), not the original asking price or the price of recommended/sponsored products.
         """
         
         # Call Gemini with structured output constraints and Google Search grounding enabled
