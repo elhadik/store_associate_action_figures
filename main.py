@@ -261,8 +261,9 @@ async def scan_action_figure(
         - ebayMatchFound (True if actual matching completed sold listings exist on eBay, otherwise False)
         
         Step 2: Use the Google Search tool to search for recently completed, sold eBay auction listings for this exact collectible.
-        Formulate a search query like: "[manufacturer] [series] [productName] [year] sold completed on ebay".
-        Find as many actual completed sold listings as possible (up to 15).
+        - First, formulate a broad search query like: "[manufacturer] [series] [productName] [year] sold completed on ebay" to discover matching listings.
+        - Second, to prevent price mismatches and confirm exact listing details, perform follow-up targeted search queries using the discovered listing titles or URLs (e.g. search for the specific eBay item ID or title on Google Search) to retrieve the full listing details, sold dates, and exact final transaction prices from Google's cached snippets.
+        - Find as many actual completed sold listings as possible (up to 15).
         
         CRITICAL ACCURACY CONSTRAINTS:
         - For every item in `recentSales`, the listing title, sold price, and URL must match the exact same listing. Do NOT mismatch a URL of one item with the price of a recommended or sponsored item from the search snippet.
